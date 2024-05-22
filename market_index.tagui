@@ -1,0 +1,9 @@
+// visit website
+https://www.marketindex.com.au/scans/golden-cross
+wait 10
+
+click //*[@id="root"]/div[2]/div/div[1]/div[3]/div[2]/div[2]/a/span
+wait 2
+
+// save table
+table (//table[contains(@Class,"mi-table mt-6")) to /home/data/golden_cross_tickers.csv

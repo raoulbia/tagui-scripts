@@ -1,0 +1,42 @@
+// This flow ...
+
+//Step 1: Create CSV file with Date stamp in filename and headers Name , Price
+dump 'TICKER,NAME,SMA200PRICE,PRICE,VOLUME' to /home/data/golden_cross_tickers.csv
+
+
+// visit website
+https://www.marketbeat.com/stocks/golden-cross-stocks/
+wait 2
+
+// select Exchanges 
+click //*[@id="dropdownCountry"]
+wait 2
+
+// check GB
+click //*[@id="cphPrimaryContent_pnlFilterTable"]/div[1]/div[1]/div/ul/li[4]/label
+// check Europe
+click //*[@id="cphPrimaryContent_pnlFilterTable"]/div[1]/div[1]/div/ul/li[5]/label
+
+// close drop down menu
+click //*[@id="form1"]/div[3]
+
+// wait until page fully loaded (All Sectors)
+wait 30
+
+// count rows
+rows = count('//*table[@class="scroll-table sort-table fixed-header"]/tbody/tr')
+print `rows`
+
+// get data for each row
+for row from 1 to 10
+{
+    read //*[@id="cphPrimaryContent_pnlFilterTable"]/div[3]/div/table/tbody/tr[`row`]/td[1]/text() to name
+    print `name`
+
+    read //*[@id="cphPrimaryContent_pnlFilterTable"]/div[3]/div/table/tbody/tr[`row`]/td[2]/text() to price
+    read //*[@id="cphPrimaryContent_pnlFilterTable"]/div[3]/div/table/tbody/tr[`row`]/td[4]/text() to sma200price
+    read //*[@id="cphPrimaryContent_pnlFilterTable"]/div[3]/div/table/tbody/tr[`row`]/td[5]/text() to volume
+
+    // write `csv_row([ticker,name,industry,exchange,sma200price,price,volume])` to ../../data/tagui/gc_tickers_`timestamp()`.csv
+    write `csv_row([ticker,name,sma200price,price,volume])` to /home/data/golden_cross_tickers.csv
+}

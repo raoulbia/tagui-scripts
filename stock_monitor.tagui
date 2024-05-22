@@ -1,0 +1,7 @@
+// visit website
+https://www.stockmonitor.com/stock-screener/golden-cross-50ma-cross-up-200ma/
+wait 2
+
+read page to html
+dump html to /home/data/result.html
+
